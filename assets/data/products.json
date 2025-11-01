@@ -1,18 +1,14 @@
 [
   {
-    "id": "dying-light-the-beast",
-    "title": "Dying Light: The Beast",
-    "price": 29.90,
-    "image": "assets/images/dying-light-the-beast.jpg",
-    "minQuantity": 1,
-    "variants": []
+    "id": "caixa-misteriosa-premium",
+    "title": "Caixa Misteriosa Premium",
+    "price": 19.90,
+    "image": "assets/images/caixa-misteriosa.jpg"
   },
   {
-    "id": "silent-hill-f",
-    "title": "Silent Hill f",
-    "price": 19.90,
-    "image": "assets/images/silent-hill-f.jpg",
-    "minQuantity": 1,
-    "variants": []
+    "id": "dying-light-the-beast",
+    "title": "Dying Light: The Beast",
+    "price": 14.90,
+    "image": "assets/images/dying-light.jpg"
   }
 ]
