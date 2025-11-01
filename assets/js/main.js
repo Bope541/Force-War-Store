@@ -175,67 +175,74 @@ clearTimeout(typingTimer);
 };
 }
 (() => {
-const searchContainer = document.getElementById("search-items");
-const inputElement = document.getElementById("search");
-inputElement.addEventListener("focus", () => {
-if (inputElement.value) {
-searchContainer.style.display = "block";
-}
-});
-inputElement.addEventListener("blur", () => {
-setTimeout(() => {
-if (!searchContainer.contains(document.activeElement)) {
-searchContainer.style.display = "none";
-}
-}, 0);
-});
-useTyping(inputElement, {
-onStart: () => {
-searchContainer.style.display = "block";
-searchContainer.innerHTML = `<div class="p-3 flex items-center justify-center">${Spinner({ size: 10 })}</div>`;
-},
 
-onStop: async (content) => {
-  if (!content) {
-    searchContainer.style.display = "none";
-    return;
-  }
+(() => {
+  const searchContainer = document.getElementById("search-items");
+  const inputElement = document.getElementById("search");
 
-  try {
-      // Caminho automático que funciona em qualquer página (inicial ou subpasta)
-      const res = await fetch(
-        window.location.pathname.includes("/products/")
-          ? "../../assets/data/products.json"
-          : "assets/data/products.json"
-      );
+  // 🔹 Se não existe barra de pesquisa na página, sai da função
+  if (!searchContainer || !inputElement) return;
 
-
-    // 🔹 Filtra os produtos que correspondem ao texto digitado
-    const filtered = products.filter(p =>
-      p.title.toLowerCase().includes(content.toLowerCase())
-    );
-
-    if (filtered.length === 0) {
-      searchContainer.innerHTML = '<div class="p-3 text-center text-gray-400">Nenhum produto encontrado.</div>';
-      return;
+  inputElement.addEventListener("focus", () => {
+    if (inputElement.value) {
+      searchContainer.style.display = "block";
     }
+  });
 
-    // 🔹 Renderiza resultados
-    searchContainer.innerHTML = filtered.map(p => `
-      <a href="products/${p.id}.html" class="flex items-center gap-3 p-3 hover:bg-white/5 transition">
-        <img src="${p.image}" alt="${p.title}" class="size-10 rounded-md object-cover" />
-        <div>
-          <p class="text-sm font-medium">${p.title}</p>
-          <p class="text-xs opacity-70">R$ ${p.price.toFixed(2)}</p>
-        </div>
-      </a>
-    `).join('');
-  } catch (error) {
-    console.error("[ForceWar] Erro na pesquisa local:", error);
-    searchContainer.innerHTML = '<div class="p-3 text-center text-gray-400">Erro ao carregar produtos.</div>';
-  }
-},
-});
+  inputElement.addEventListener("blur", () => {
+    setTimeout(() => {
+      if (!document.activeElement || !searchContainer.contains(document.activeElement)) {
+        searchContainer.style.display = "none";
+      }
+    }, 0);
+  });
+
+  useTyping(inputElement, {
+    onStart: () => {
+      searchContainer.style.display = "block";
+      searchContainer.innerHTML = `<div class="p-3 flex items-center justify-center">${Spinner({ size: 10 })}</div>`;
+    },
+
+    onStop: async (content) => {
+      if (!content) {
+        searchContainer.style.display = "none";
+        return;
+      }
+
+      try {
+        // Caminho dinâmico entre raiz e subpáginas
+        const res = await fetch(
+          window.location.pathname.includes("/products/")
+            ? "../../assets/data/products.json"
+            : "assets/data/products.json"
+        );
+
+        const products = await res.json();
+        const filtered = products.filter(p =>
+          p.title.toLowerCase().includes(content.toLowerCase())
+        );
+
+        if (filtered.length === 0) {
+          searchContainer.innerHTML = '<div class="p-3 text-center text-gray-400">Nenhum produto encontrado.</div>';
+          return;
+        }
+
+        searchContainer.innerHTML = filtered.map(p => `
+          <a href="../../products/${p.id}/index.html" class="flex items-center gap-3 p-3 hover:bg-white/5 transition">
+            <img src="../../${p.image}" alt="${p.title}" class="size-10 rounded-md object-cover" />
+            <div>
+              <p class="text-sm font-medium">${p.title}</p>
+              <p class="text-xs opacity-70">R$ ${p.price.toFixed(2)}</p>
+            </div>
+          </a>
+        `).join('');
+      } catch (error) {
+        console.error("[ForceWar] Erro na pesquisa local:", error);
+        searchContainer.innerHTML = '<div class="p-3 text-center text-gray-400">Erro ao carregar produtos.</div>';
+      }
+    },
+  });
+})();
 
 })();
 (() => {
