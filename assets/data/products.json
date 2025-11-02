@@ -1,0 +1,14 @@
+[
+  {
+    "id": "caixa-misteriosa-premium",
+    "title": "Caixa Misteriosa Premium",
+    "price": 19.90,
+    "image": "assets/images/caixa-misteriosa.jpg"
+  },
+  {
+    "id": "dying-light-the-beast",
+    "title": "Dying Light: The Beast",
+    "price": 14.90,
+    "image": "assets/images/dying-light.jpg"
+  }
+]
